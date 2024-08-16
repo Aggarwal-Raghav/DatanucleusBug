@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jdo xmlns="http://xmlns.jcp.org/xml/ns/jdo/jdo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/jdo/jdo http://xmlns.jcp.org/xml/ns/jdo/jdo_3_1.xsd" version="3.1">
+    <package name="com.github.raghav">
+        <class name="Person" embedded-only="true" table="PERSON" detachable="true">
+            <field name="name">
+              <column name="PERSON_NAME" length="128" jdbc-type="VARCHAR"/>
+            </field>
+
+            <field name="age">
+              <column name="PERSON_AGE" jdbc-type="BIGINT" allows-null="false"/>
+            </field>
+
+            <field name="city">
+              <column name="CITY" length="256" jdbc-type="VARCHAR" allows-null="true"/>
+            </field>
+        </class>
+
+        <class name="Product" table="PRODUCT" detachable="true">
+
+            <field name="id" primary-key="true" value-strategy="native">
+                <column name="PRODUCT_ID" jdbc-type="BIGINT"/>
+            </field>
+
+            <field name="name">
+                <column name="PRODUCT_NAME" length="128" jdbc-type="VARCHAR"/>
+                <index name="UniqueType" unique="true"/>
+            </field>
+
+            <field name="description">
+                 <column name="PRODUCT_DESCRIPTION" length="767" jdbc-type="VARCHAR"/>
+            </field>
+
+            <field name="suppliers" table="PERSON">
+                <collection element-type="Person"/>
+                <join>
+                    <primary-key name="PRODUCT_SUPPLIER_PK">
+                        <column name="PRODUCT_NAME"/>
+                        <column name="PERSON_NAME"/>
+                    </primary-key>
+                    <column name="PRODUCT_NAME"/>
+                </join>
+                <element>
+                  <embedded>
+                    <field name="name">
+                      <column name="PERSON_NAME" length="128" jdbc-type="VARCHAR"/>
+                    </field>
+
+                    <field name="age">
+                      <column name="PERSON_AGE" jdbc-type="BIGINT" allows-null="false"/>
+                    </field>
+
+                    <field name="city">
+                      <column name="CITY" length="256" jdbc-type="VARCHAR" allows-null="true"/>
+                    </field>
+                  </embedded>
+                </element>
+            </field>
+        </class>
+    </package>
+</jdo>
